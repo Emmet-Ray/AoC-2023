@@ -4,29 +4,63 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
+/**
+ * this could be done more concise by refactoring.
+*/
 public class PossibleGames {
+
 
     private static final int redNum = 12;
     private static final int greenNum = 13;
     private static final int blueNum = 14;
 
-    /**
-     * a game is possible if every round of the game satisfies "12 read, 13 green, 14 blue"
-     * @param game the game in the form of, e.g. "Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green"
-     * @return game ID if possible, if impossible return 0;
-     */
+    static int redMin = Integer.MIN_VALUE;
+    static int greenMin = Integer.MIN_VALUE;
+    static int blueMin = Integer.MIN_VALUE;
+
     public static int possibleGame(String game) {
         String[] IDRound = game.split(": ");
         String[] id = IDRound[0].split(" ");
         int gameID = Integer.parseInt(id[1]);
         String[] Rounds = IDRound[1].split("; ");
+        int result = 0;
         for (String round: Rounds) {
-            if (!possibleRound(round)) {
-               return 0;
+            aRound(round);
+        }
+        result = redMin * greenMin * blueMin;
+        redMin = greenMin = blueMin = Integer.MIN_VALUE;
+        return result;
+    }
+
+    public static void aRound(String round) {
+        String[] result = round.split(", ");
+        for (String numberColor: result) {
+            if (numberColor.isEmpty()) {
+                continue;
+            }
+            String[] split = numberColor.split(" ");
+            int num = Integer.parseInt(split[0]);
+            switch (split[1]) {
+                case "red": {
+                    if (num > redMin) {
+                        redMin = num;
+                    }
+                    break;
+                }
+                case "green": {
+                    if (num > greenMin) {
+                        greenMin = num;
+                    }
+                    break;
+                }
+                case "blue": {
+                    if (num > blueMin) {
+                        blueMin = num;
+                    }
+                    break;
+                }
             }
         }
-        System.out.println("gameID: " + gameID);
-        return gameID;
     }
 
     /**
