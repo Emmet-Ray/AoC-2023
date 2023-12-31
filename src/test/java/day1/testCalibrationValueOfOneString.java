@@ -22,38 +22,27 @@ public class testCalibrationValueOfOneString {
      */
    @Test
    public void testLetterDigit() {
-       SumOfCalibrationValues.Pair result = SumOfCalibrationValues.LetterDigit("one", 0);
-       assertEquals(2, result.increaseStep);
-       assertEquals(1, result.digit);
+       int result = SumOfCalibrationValues.LetterDigit("one", 0);
+       assertEquals(1, result);
        result = SumOfCalibrationValues.LetterDigit("twodaf", 0);
-       assertEquals(2, result.increaseStep);
-       assertEquals(2, result.digit);
+       assertEquals(2, result);
        result = SumOfCalibrationValues.LetterDigit("six", 0);
-       assertEquals(2, result.increaseStep);
-       assertEquals(6, result.digit);
+       assertEquals(6, result);
 
        result = SumOfCalibrationValues.LetterDigit("four", 0);
-       assertEquals(3, result.increaseStep);
-       assertEquals(4, result.digit);
+       assertEquals(4, result);
        result = SumOfCalibrationValues.LetterDigit("five", 0);
-       assertEquals(3, result.increaseStep);
-       assertEquals(5, result.digit);
+       assertEquals(5, result);
        result = SumOfCalibrationValues.LetterDigit("nine", 0);
-       assertEquals(3, result.increaseStep);
-       assertEquals(9, result.digit);
+       assertEquals(9, result);
 
        result = SumOfCalibrationValues.LetterDigit("three", 0);
-       assertEquals(4, result.increaseStep);
-       assertEquals(3, result.digit);
+       assertEquals(3, result);
        result = SumOfCalibrationValues.LetterDigit("seven", 0);
-       assertEquals(4, result.increaseStep);
-       assertEquals(7, result.digit);
+       assertEquals(7, result);
        result = SumOfCalibrationValues.LetterDigit("eight", 0);
-       assertEquals(4, result.increaseStep);
-       assertEquals(8, result.digit);
+       assertEquals(8, result);
 
-       result = SumOfCalibrationValues.LetterDigit("eight", 1);
-       assertEquals(0, result.increaseStep);
    }
 
    @Test
