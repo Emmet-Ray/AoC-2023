@@ -24,7 +24,7 @@ public class testSumOfPartNum {
         String file = "C:\\Users\\Lenovo\\Desktop\\AdventOfCode2023\\src\\main\\resources\\day3\\smallInput.txt";
         try {
             int result = SumOfPartNum.sumOfFile(file);
-            assertEquals(4361, result);
+            assertEquals(467835, result);
         } catch (IOException e) {
             e.printStackTrace();
         }

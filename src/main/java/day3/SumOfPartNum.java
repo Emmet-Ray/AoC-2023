@@ -8,79 +8,108 @@ import static org.junit.Assert.assertEquals;
 
 public class SumOfPartNum {
 
-    /**
-     *
-     * @param c
-     * @return
-     */
-    public static boolean isSymbol(char c) {
-        return c != '.' && !Character.isDigit(c);
-    }
-
     public static boolean isValidIndex(int len, int index) {
         return index > -1 && index < len;
     }
 
-    public static boolean isPartNumHelper(int len, int index, String adjacentLine) {
-        return isValidIndex(len, index) && isSymbol(adjacentLine.charAt(index));
-    }
-    /**
-     *
-     * @param index
-     * @param adjacentLine
-     * @return
-     */
-    public static boolean isPartNumCase1(int index, String adjacentLine) {
-        if (adjacentLine == null) {
-            return false;
-        }
-        int len = adjacentLine.length();
-        return isPartNumHelper(len, index - 1, adjacentLine) ||
-                isPartNumHelper(len, index, adjacentLine)||
-                isPartNumHelper(len, index + 1, adjacentLine);
+    public static boolean isStar(char c) {
+        return c == '*';
     }
 
-    public static boolean isPartNumCase2(String currentLine, int start, int end) {
-        int len = currentLine.length();
-        return isValidIndex(len, start - 1) && isSymbol(currentLine.charAt(start - 1)) ||
-                isValidIndex(len, end) && isSymbol(currentLine.charAt(end));
+    public static int oneCase(String s, int index) {
+        if (s == null) {
+            return 0;
+        }
+
+        if (!isValidIndex(s.length(), index) || !Character.isDigit(s.charAt(index))) {
+            return 0;
+        }
+
+        int startIndex = index - 1;
+        int endIndex = index + 1;
+        while (isValidIndex(s.length(), startIndex) && Character.isDigit(s.charAt(startIndex))) {
+            startIndex--;
+        }
+        while (isValidIndex(s.length(), endIndex) && Character.isDigit(s.charAt(endIndex))) {
+            endIndex++;
+        }
+        return Integer.parseInt(s.substring(startIndex + 1, endIndex));
+    }
+
+    // the redundancy is because I need to trace both [counter] & [result].
+    // of course, I could create a class as return type
+    // My goal is to calculate the result
+    public static int sumOfOneLineHelper(String current, int index, String prev, String next) {
+        int counter = 0;
+        int result = 1;
+
+        int cur = oneCase(current, index - 1);
+        if (cur > 0) {
+            result *= cur;
+            counter++;
+        }
+        cur = oneCase(current, index + 1);
+        if (cur > 0) {
+            result *= cur;
+            counter++;
+        }
+
+        cur = oneCase(prev, index);
+        if (cur > 0) {
+            result *= cur;
+            counter++;
+        } else {
+            cur = oneCase(prev, index - 1);
+            if (cur > 0) {
+                result *= cur;
+                counter++;
+            }
+            cur = oneCase(prev, index + 1);
+            if (cur > 0) {
+                result *= cur;
+                counter++;
+            }
+        }
+
+        cur = oneCase(next, index);
+        if (cur > 0) {
+            result *= cur;
+            counter++;
+        } else {
+            cur = oneCase(next, index - 1);
+            if (cur > 0) {
+                result *= cur;
+                counter++;
+            }
+            cur = oneCase(next, index + 1);
+            if (cur > 0) {
+                result *= cur;
+                counter++;
+            }
+        }
+
+        if (counter == 2) {
+            return result;
+        }
+        return 0;
     }
 
     /**
      *
      * @param currentLine
-     * @param adjacentLine
+     * @param prevLine
+     * @param nextLine
      * @return
      */
-    public static int sumOfOneLine(String currentLine, String adjacentLine, String nextLine) {
+    public static int sumOfOneLine(String currentLine, String prevLine, String nextLine) {
         int sum = 0;
-        int startIndex = 0;
-        int endIndex = 0;
-        boolean isPartNum;
-        for (int i = 0; i < currentLine.length(); i++) {
-            // find the start index of a number
-            while (i < currentLine.length() && !Character.isDigit(currentLine.charAt(i))) {
+
+        int len = currentLine.length();
+        for (int i = 0; i < len; i++) {
+            while (isValidIndex(len, i) && !isStar(currentLine.charAt(i))) {
                 i++;
             }
-            startIndex = i;
-
-            isPartNum = false;
-            while (i < currentLine.length() && Character.isDigit(currentLine.charAt(i))) {
-                if (!isPartNum) {
-                    isPartNum = isPartNumCase1(i, adjacentLine) || isPartNumCase1(i, nextLine);
-                }
-                i++;
-            }
-            endIndex = i;
-
-            boolean case2 = isPartNumCase2(currentLine, startIndex, endIndex);
-            isPartNum = isPartNum || case2;
-            if (isPartNum) {
-                sum += Integer.parseInt(currentLine.substring(startIndex, endIndex));
-            }
-        }
-        if (sum != 0) {
-            System.out.println(sum);
+            sum += sumOfOneLineHelper(currentLine, i, prevLine, nextLine);
         }
         return sum;
     }
