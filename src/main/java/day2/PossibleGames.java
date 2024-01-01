@@ -120,7 +120,7 @@ public class PossibleGames {
 
     public static void main(String[] args) {
         try {
-            int sum = sumOfPossibleGameID("C:\\Users\\Lenovo\\Desktop\\AdventOfCode2023\\src\\test\\java\\day2\\puzzle1_input.txt");
+            int sum = sumOfPossibleGameID("C:\\Users\\Lenovo\\Desktop\\AdventOfCode2023\\src\\main\\resources\\day2\\input.txt");
             System.out.println(sum);
         } catch (IOException e) {
             e.printStackTrace();

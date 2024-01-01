@@ -79,7 +79,7 @@ public class SumOfCalibrationValues {
 
     public static void main(String[] args) {
         try {
-            int result = sumOfCalibrationValues("C:\\Users\\Lenovo\\Desktop\\AdventOfCode2023\\src\\main\\resources\\day1\\puzzle2_input.txt");
+            int result = sumOfCalibrationValues("C:\\Users\\Lenovo\\Desktop\\AdventOfCode2023\\src\\main\\resources\\day1\\input.txt");
             System.out.println("result: " + result);
         } catch (IOException e) {
             e.printStackTrace();
