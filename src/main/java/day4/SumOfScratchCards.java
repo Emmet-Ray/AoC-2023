@@ -12,9 +12,9 @@ public class SumOfScratchCards {
 
 
     /**
-     * return the points [card] winning
+     *
      * @param card
-     * @return
+     * @return number of my winning cards
      */
     public static int oneCard(String card) {
         String[] split1 = card.split(": ");
@@ -39,32 +39,38 @@ public class SumOfScratchCards {
                 numOfMyWinningCards++;
             }
         }
-        return numOfMyWinningCards == 0 ? 0 : (int)Math.pow(2, numOfMyWinningCards - 1);
+        return numOfMyWinningCards;
     }
 
+
+
+    private static final int NUM_OF_WINNING_CARDS = 10;
     /**
-     * read cards from file
      * @param file
-     * @return sum of winning points
+     * @return
      */
     public static int Cards(String file) throws IOException{
         BufferedReader reader = new BufferedReader(new FileReader(file));
         int sum = 0;
         String card = reader.readLine();
+        int curWinningCardNum = 0;
+        int[] copies = new int[NUM_OF_WINNING_CARDS];
         while (card != null) {
-            sum += oneCard(card);
+            int curRealNum = 1 + copies[0];
+            sum += curRealNum;
+            for (int i = 0; i < NUM_OF_WINNING_CARDS - 1; i++) {
+                copies[i] = copies[i + 1];
+            }
+            // don't miss this line
+            copies[NUM_OF_WINNING_CARDS - 1] = 0;
+
+            curWinningCardNum = oneCard(card);
+
+            for (int i = 0; i < curWinningCardNum; i++) {
+                copies[i] += curRealNum;
+            }
             card = reader.readLine();
         }
         return sum;
-    }
-
-    public static void main(String[] args) {
-        String file = "C:\\Users\\Lenovo\\Desktop\\AdventOfCode2023\\src\\main\\resources\\day4\\smallInput.txt";
-        try {
-            int result = Cards(file);
-            System.out.println(result);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }
