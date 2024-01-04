@@ -10,6 +10,7 @@ import java.util.Set;
 
 public class Seed {
 
+
     private static final int MAPS_NUM = 7;
     private static final int NOT_FOUND = -1;
 
@@ -24,17 +25,12 @@ public class Seed {
             this.rangeLength = rangeLength;
         }
 
-        /**
-         * transform from src to dst
-         * @param src
-         * @return the corresponding dst result if src is in the src range; otherwise return NOT_FOUND;
-         */
-        public long srcToDst(long src) {
-            if (src < sourceRangeStart || src >= sourceRangeStart + rangeLength) {
+        public long dstToSrc(long dst) {
+            if (dst < destinationRangeStart || dst >= destinationRangeStart + rangeLength) {
                 return NOT_FOUND;
             }
-            long distance = src - sourceRangeStart;
-            return destinationRangeStart + distance;
+            long distance = dst - destinationRangeStart;
+            return sourceRangeStart + distance;
         }
 
         @Override
@@ -48,7 +44,7 @@ public class Seed {
     private static long oneIteration(long src, Set<aMap> map) {
         long result = NOT_FOUND;
         for (aMap a: map) {
-            result = a.srcToDst(src);
+            result = a.dstToSrc(src);
             if (result != NOT_FOUND) {
                 return result;
             }
@@ -56,9 +52,9 @@ public class Seed {
         return src;
     }
 
-    private static long seedToLocation(long seedNum, Set<aMap>[] maps) {
-        long src = seedNum;
-        for (int i = 0; i < maps.length; i++) {
+    private static long locationToSeed(long locationNum, Set<aMap>[] maps) {
+        long src = locationNum;
+        for (int i = maps.length - 1; i > -1; i--) {
             src = oneIteration(src, maps[i]);
         }
         return src;
@@ -90,11 +86,31 @@ public class Seed {
             line = reader.readLine();
         }
 
-        long result = Integer.MAX_VALUE;
+        long[] numSeeds = new long[seeds.length];
         for (int i = 0; i < seeds.length; i++) {
-            long seedNum = Long.parseLong(seeds[i]);
-            result = Math.min(result, seedToLocation(seedNum, maps));
+            numSeeds[i] = Long.parseLong(seeds[i]);
         }
-        return result;
+
+        long returnResult = 0;
+        long result = 0;
+        for (long i = 0; i < Long.MAX_VALUE; i++) {
+            result = locationToSeed(i, maps);
+            if (contains(numSeeds, result)) {
+                returnResult = i;
+                break;
+            }
+        }
+        return returnResult;
+    }
+
+    private static boolean contains(long[] seeds, long value) {
+        for (int i = 0; i < seeds.length; i += 2) {
+            long start = seeds[i];
+            long range = seeds[i + 1];
+            if (value >= start && value < start + range) {
+                return true;
+            }
+        }
+        return false;
     }
 }
