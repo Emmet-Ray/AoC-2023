@@ -12,7 +12,7 @@ public class BoatGame {
      * @param file input file with fixed format
      * @return same as method name
      */
-    public static int numberOfWaysToWin(String file) throws IOException {
+    public static long numberOfWaysToWin(String file) throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(file));
 
         String timeLine = reader.readLine();
@@ -22,20 +22,22 @@ public class BoatGame {
         String[] splitTime = time[1].split(" +");
         String[] splitDistance = distance[1].split(" +");
 
-        int result = 1;
+        long result = 1;
+        StringBuilder realTime = new StringBuilder();
+        StringBuilder realDistance = new StringBuilder();
         for (int i = 0; i < splitTime.length; i++) {
-            int currentTime = Integer.parseInt(splitTime[i]);
-            int currentRecord = Integer.parseInt(splitDistance[i]);
-            result *= waysToWin(currentTime, currentRecord);
+            realTime.append(splitTime[i]);
+            realDistance.append(splitDistance[i]);
         }
+        result = waysToWin(Long.parseLong(realTime.toString()), Long.parseLong(realDistance.toString()));
         return result;
     }
 
-    private static int waysToWin(int time, int recordDistance) {
-        int count = 0;
+    private static long waysToWin(long time, long recordDistance) {
+        long count = 0;
         // i stands for hold up time
-        for (int i = 0; i < time; i++) {
-            int distance = i * (time - i);
+        for (long i = 0; i < time; i++) {
+            long distance = i * (time - i);
             if (distance > recordDistance) {
                 count++;
             }
