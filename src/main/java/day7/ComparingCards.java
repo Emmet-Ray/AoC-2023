@@ -15,7 +15,7 @@ public class ComparingCards implements Comparator {
             Map.entry('8', 6),
             Map.entry('9', 7),
             Map.entry('T', 8),
-            Map.entry('J', 9),
+            Map.entry('J', -1), // change to -1 less than value of '2'
             Map.entry('Q', 10),
             Map.entry('K', 11),
             Map.entry('A', 12)
@@ -23,12 +23,39 @@ public class ComparingCards implements Comparator {
 
     private static HandType handType(String handOfCard) {
         Map<Character, Integer> map = new HashMap();
+        int numberOfJokers = 0;
         for (int i = 0; i < handOfCard.length(); i++) {
             char currentCard = handOfCard.charAt(i);
+            if (currentCard == 'J') {
+                numberOfJokers++;
+                continue;
+            }
             if (map.containsKey(currentCard)) {
                 map.put(currentCard, map.get(currentCard) + 1);
             } else {
                 map.put(currentCard, 1);
+            }
+        }
+        if (numberOfJokers != 0) {
+            // maximize the rank of the hand
+            char targetCard = 'J';
+            int maxNumber = 0;
+            for (Map.Entry<Character, Integer> entry: map.entrySet()) {
+                char currentCard = entry.getKey();
+                int currentNumber = entry.getValue();
+                if (currentNumber > maxNumber) {
+                    targetCard = currentCard;
+                    maxNumber = currentNumber;
+                } else if (currentNumber == maxNumber) {
+                    if (compareCard(currentCard, targetCard) > 0){
+                        targetCard = currentCard;
+                    }
+                }
+            }
+            if (targetCard == 'J') {
+                map.put(targetCard, numberOfJokers);
+            } else {
+                map.put(targetCard, map.get(targetCard) + numberOfJokers);
             }
         }
 
