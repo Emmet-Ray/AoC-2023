@@ -29,7 +29,7 @@ public class Day9 {
             nextSequence.add(current);
         }
         int next = nextValue(nextSequence);
-        return next + sequence.get(sequence.size() - 1);
+        return sequence.get(0) - next;
     }
 
     private static List<Integer> stringListToIntList(String[] list) {
@@ -47,7 +47,8 @@ public class Day9 {
         int sum = 0;
         while (currentLine != null) {
             List<Integer> current = stringListToIntList(currentLine.split(" +"));
-            sum += nextValue(current);
+            int currentNext = nextValue(current);
+            sum += currentNext;
             currentLine = reader.readLine();
         }
         return sum;
