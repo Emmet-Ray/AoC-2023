@@ -37,7 +37,6 @@ public class PointOfIncidence {
         for (int i = 0; i < rowNumber-1; i++) {
             int current = checkRowSymmetry(block, i, i+1);
             if (current != -1) {
-                System.out.println(i + 1);
                 return 100 * (i + 1);
             }
         }
@@ -45,7 +44,6 @@ public class PointOfIncidence {
         for (int i = 0; i < columnNumber-1; i++) {
             int current = checkColumnSymmetry(block, i, i + 1);
             if (current != -1) {
-                System.out.println(i + 1);
                 return i + 1;
             }
         }
@@ -56,35 +54,47 @@ public class PointOfIncidence {
         int columnNumber = block[0].length;
         int leftIndex = first;
         int rightIndex = second;
+        int numberOfSmudge = 0;
         while (true) {
             for (int i = 0; i < block.length; i++) {
                 if (block[i][leftIndex] != block[i][rightIndex]) {
-                    return -1;
+                    numberOfSmudge++;
                 }
             }
 
             leftIndex--;
             rightIndex++;
             if (leftIndex < 0 || rightIndex >= columnNumber) {
-                return 1;
+                break;
             }
+        }
+        if (numberOfSmudge == 1) {
+            return 1;
+        } else {
+            return -1;
         }
     }
 
     private static int checkRowSymmetry(char[][] block, int first, int second) {
         int aboveIndex = first;
         int belowIndex = second;
+        int numberOfSmudge = 0;
         while (true) {
             for (int i = 0; i < block[0].length; i++) {
                if (block[aboveIndex][i] != block[belowIndex][i]) {
-                   return -1;
+                   numberOfSmudge++;
                }
             }
             aboveIndex--;
             belowIndex++;
             if (aboveIndex == -1 || belowIndex == block.length) {
-                return 1;
+                break;
             }
+        }
+        if (numberOfSmudge == 1) {
+            return 1;
+        } else {
+            return -1;
         }
     }
 
