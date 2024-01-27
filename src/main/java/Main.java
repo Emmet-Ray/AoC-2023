@@ -1,12 +1,4 @@
-import day10.PipeMaze;
-import day11.CosmicExpansion;
-import day12.HotSprings;
-import day4.SumOfScratchCards;
-import day5.Seed;
-import day6.BoatGame;
-import day7.CamelCards;
-import day8.CamelMap;
-import day9.Day9;
+import day13.PointOfIncidence;
 
 import java.io.IOException;
 
