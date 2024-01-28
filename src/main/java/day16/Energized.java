@@ -52,4 +52,7 @@ public class Energized {
     public boolean isEnergnized() {
         return energnized;
     }
+    public void initialize() {
+        energnized = left = right = up = down = false;
+    }
 }

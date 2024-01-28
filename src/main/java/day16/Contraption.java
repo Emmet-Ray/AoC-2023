@@ -39,8 +39,61 @@ public class Contraption {
             rowIndex++;
             currentLine = reader.readLine();
         }
-        Beam initialBeam = new Beam(Direction.RIGHT, new Coordinate(0, 0));
-        beams.add(initialBeam);
+    }
+
+    public int findBestConfiguration() {
+        int result = 0;
+        // top row
+        for (int i = 0; i < grid[0].length; i++) {
+            Beam initialBeam = new Beam(Direction.DOWN, new Coordinate(0, i));
+            beams.add(initialBeam);
+            int current = simulate();
+            if (current > result) {
+                result = current;
+            }
+            clearEnergized();
+        }
+        // bottom row
+        for (int i = 0; i < grid[0].length; i++) {
+            Beam initialBeam = new Beam(Direction.UP, new Coordinate(grid.length-1 , i));
+            beams.add(initialBeam);
+            int current = simulate();
+            if (current > result) {
+                result = current;
+            }
+            clearEnergized();
+        }
+        // left row
+        for (int i = 0; i < grid.length; i++) {
+            Beam initialBeam = new Beam(Direction.RIGHT, new Coordinate(i , 0));
+            beams.add(initialBeam);
+            int current = simulate();
+            if (current > result) {
+                result = current;
+            }
+            clearEnergized();
+        }
+        // right row
+        for (int i = 0; i < grid.length; i++) {
+            Beam initialBeam = new Beam(Direction.LEFT, new Coordinate(i , grid[0].length-1));
+            beams.add(initialBeam);
+            int current = simulate();
+            if (current > result) {
+                result = current;
+            }
+            clearEnergized();
+        }
+
+        return result;
+    }
+
+    private void clearEnergized() {
+        for (int i = 0; i < energized.length; i++) {
+            for (int j = 0; j < energized[0].length; j++) {
+                Energized current = energized[i][j];
+                current.initialize();
+            }
+        }
     }
 
     public int simulate() {
@@ -191,7 +244,7 @@ public class Contraption {
 
     public static int result(String file) throws IOException {
         Contraption contraption = new Contraption(file);
-        int result = contraption.simulate();
+        int result = contraption.findBestConfiguration();
         return result;
     }
 }
