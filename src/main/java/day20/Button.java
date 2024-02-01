@@ -72,28 +72,14 @@ public class Button {
             currentLine = reader.readLine();
         }
 
-        int pushTimes = 1000;
-        int i;
-        for (i = 0; i < pushTimes; i++) {
-            pushButton();
-            if (returnToInitialState()) {
-                break;
-            }
-        }
-        System.out.println(i);
-        int numberOfCycle = pushTimes / (i + 1);
-        System.out.println(lowPulseTimesPerCycyle + ", " + highPulseTimesPerCycle);
-        long result;
-        if (i < pushTimes) {
-            // this is false
-            result = numberOfCycle * lowPulseTimesPerCycyle * numberOfCycle * highPulseTimesPerCycle;
-        } else {
-            result = lowPulseTimesPerCycyle * highPulseTimesPerCycle;
+        long result = 0;
+        while (!pushButton()) {
+            result++;
         }
         return result;
     }
 
-    private static void pushButton() {
+    private static boolean pushButton() {
         lowPulseTimesPerCycyle++;
 
         Queue<Module> queue = new ArrayDeque<>();
@@ -109,7 +95,9 @@ public class Button {
                 } else {
                     lowPulseTimesPerCycyle++;
                 }
-                if (currentTarget == null) {
+                if (currentTarget == null && !outputPulse) {
+                    return true;
+                } else if (currentTarget == null) {
                     continue;
                 }
                 switch (currentTarget.getModuleType()) {
@@ -128,7 +116,7 @@ public class Button {
                 }
             }
         }
-
+        return false;
     }
 
     private static boolean returnToInitialState() {
